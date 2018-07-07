@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">DesafioNW</string>
+    <string name="txt_title_heroes">Heroes</string>
+    <string name="txt_name_heroe">Olá, meu nome é Bruno</string>
+    <string name="txt_class_heroe">O clã existe a quase dez anos e com o passar do tempo estamos com muitos guerreiros em nosso clã. Com o grande crescimento comecçamos a enfrentar alguns problemas de organização e controle dos nossos guerreiros.</string>
+
+    <string name="action_search">Pesquisar</string>
+    <string name="action_remove">Deletar</string>
+</resources>
