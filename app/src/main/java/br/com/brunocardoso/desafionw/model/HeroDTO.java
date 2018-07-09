@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class HeroVO implements Serializable {
+public class HeroDTO implements Serializable {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -41,10 +41,10 @@ public class HeroVO implements Serializable {
     @Expose
     private List<String> photos;
 
-    public HeroVO() {
+    public HeroDTO() {
     }
 
-    public HeroVO(Integer id, Integer classId, String name, Double healthPoints, Double defense, Double damage, Double attackSpeed, Double movimentSpeed, String className, List<Integer> specialties, List<String> photos) {
+    public HeroDTO(Integer id, Integer classId, String name, Double healthPoints, Double defense, Double damage, Double attackSpeed, Double movimentSpeed, String className, List<Integer> specialties, List<String> photos) {
         this.id = id;
         this.classId = classId;
         this.name = name;

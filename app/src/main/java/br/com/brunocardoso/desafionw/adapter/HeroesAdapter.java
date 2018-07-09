@@ -1,5 +1,6 @@
 package br.com.brunocardoso.desafionw.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -80,6 +81,10 @@ public class HeroesAdapter extends RecyclerView.Adapter<HeroesAdapter.HeroesView
             tvHeroeName = itemView.findViewById(R.id.tv_name_id);
             tvHeroeClass = itemView.findViewById(R.id.tv_class_id);
             ivHeroeAvatar = itemView.findViewById(R.id.iv_avatar_id);
+
+            tvHeroeName.setBackgroundColor(Color.TRANSPARENT);
+            tvHeroeClass.setBackgroundColor(Color.TRANSPARENT);
+            ivHeroeAvatar.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 

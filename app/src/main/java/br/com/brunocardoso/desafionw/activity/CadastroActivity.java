@@ -1,16 +1,9 @@
 package br.com.brunocardoso.desafionw.activity;
 
-import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.support.design.widget.TextInputEditText;
+import android.os.PersistableBundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,9 +22,8 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 import br.com.brunocardoso.desafionw.R;
 import br.com.brunocardoso.desafionw.adapter.PhotosAdapter;
@@ -42,11 +33,9 @@ import br.com.brunocardoso.desafionw.api.PhotosService;
 import br.com.brunocardoso.desafionw.api.SpecialtieService;
 import br.com.brunocardoso.desafionw.model.Classe;
 import br.com.brunocardoso.desafionw.model.Hero;
-import br.com.brunocardoso.desafionw.model.HeroVO;
-import br.com.brunocardoso.desafionw.model.Photo;
+import br.com.brunocardoso.desafionw.model.HeroDTO;
 import br.com.brunocardoso.desafionw.model.Specialty;
 import br.com.brunocardoso.desafionw.network.RetrofitInstance;
-import br.com.brunocardoso.desafionw.tasks.PhotoAsync;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -56,12 +45,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class CadastroActivity extends AppCompatActivity implements PhotoAsync.SaveHeroInterface{
+public class CadastroActivity extends AppCompatActivity{
     private EditText edtHeroiNome,
             edtHeroiClasses,
-            edtHeroiHabilidades;
-
-    private TextInputEditText edtHeroiVida,
+            edtHeroiHabilidades,
+            edtHeroiVida,
             edtHeroiDefesa,
             edtHeroiDano,
             edtHeroiVeloAtaque,
@@ -96,21 +84,53 @@ public class CadastroActivity extends AppCompatActivity implements PhotoAsync.Sa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
+        retrofit = RetrofitInstance.getInstace();
+
+        initViews();
+        listarClasses();
+        listarSpecialties();
+
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             if (bundle.containsKey("hero")) {
                 heroUpdate = (Hero) bundle.get("hero");
                 updateForm = true;
+                btnSalvarHeroi.setText("Atualizar");
+
+                // Carregar campos com os dados do heroi selecionado
+                carregaDadosHeroi( heroUpdate );
             }
         }
+    }
 
-        retrofit = RetrofitInstance.getInstace();
+    private void carregaDadosHeroi(Hero heroUpdate) {
+        edtHeroiNome.setText( heroUpdate.getName() );
+        edtHeroiClasses.setText( heroUpdate.getClassName() );
+        edtHeroiVida.setText( String.valueOf(heroUpdate.getHealthPoints()) );
+        edtHeroiDano.setText( String.valueOf(heroUpdate.getDamage()) );
+        edtHeroiDefesa.setText( String.valueOf(heroUpdate.getDefense()) );
+        edtHeroiVeloAtaque.setText( String.valueOf(heroUpdate.getAttackSpeed()) );
+        edtHeroiVeloMovimento.setText( String.valueOf(heroUpdate.getMovimentSpeed()) );
 
-        listarClasses();
+        // Carrega Classe
+        classeSelected = new Classe( heroUpdate.getClassId(), heroUpdate.getClassName());
 
-        listarSpecialties();
+        // Carrega Habilidades
+        StringBuilder habilidadesName = new StringBuilder();
+        for(Specialty specialty: heroUpdate.getSpecialties()){
+            specialtySelectedList.add( specialty.getId() );
+            habilidadesName.append(specialty.getName() + ", ");
+        }
+        int lastIndice = habilidadesName.lastIndexOf(",");
+        String habilidadesTexto = habilidadesName.replace(lastIndice, lastIndice+2, "").toString();
+        edtHeroiHabilidades.setText( habilidadesTexto );
 
-        initViews();
+        // Carrega fotos
+        Uri uri = Uri.parse(
+                String.format("http://heroes.qanw.com.br:7266/photos/%s", heroUpdate.getPhotos().get(0))
+                );
+        photoList.add( uri );
+        photoSelectedList.addAll( heroUpdate.getPhotos() );
     }
 
     private void initViews() {
@@ -160,14 +180,21 @@ public class CadastroActivity extends AppCompatActivity implements PhotoAsync.Sa
         btnSalvarHeroi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new PhotoAsync(getParent()).execute(photoList);
+//                new PhotoAsync(getParent()).execute(photoList);
+
+                if (validateFieldsHero()) {
+                    if (!updateForm)
+                        saveHero();
+                    else
+                        updateHero();
+                }
             }
         });
     }
 
     private void cadastroHeroTest() {
 
-        HeroVO hero = new HeroVO();
+        HeroDTO hero = new HeroDTO();
         hero.setName( "Heroi Teste" );
         hero.setClassId( 1 );
         hero.setClassName( "Mago" );
@@ -282,7 +309,7 @@ public class CadastroActivity extends AppCompatActivity implements PhotoAsync.Sa
     }
 
     public void openDialogSpecialtie(View view){
-
+        specialtySelectedList = new ArrayList<>();
         final String[] specialtieConvertList = new String[ specialtyList.size() ];
 
         for (int i = 0; i< specialtyList.size(); i++){
@@ -307,44 +334,27 @@ public class CadastroActivity extends AppCompatActivity implements PhotoAsync.Sa
             public void onClick(DialogInterface dialog, int which) {
 
                 StringBuilder habilidadesHero = new StringBuilder();
-                for(int i=0; i<specialtieCheckedList.length; i++){
+                for (int i = 0; i < specialtieConvertList.length; i++) {
 
                     boolean checked = specialtieCheckedList[i];
                     if (checked) {
-                        habilidadesHero.append( specialtieConvertList[i] + ", ");
+                        habilidadesHero.append(specialtieConvertList[i] + ", ");
                     }
                 }
 
-                int lastIndice = habilidadesHero.lastIndexOf(",");
-                String habilidadesTexto = habilidadesHero.replace(lastIndice, lastIndice+2, "").toString();
-                edtHeroiHabilidades.setText( habilidadesTexto );
+                if(habilidadesHero.length() > 0){
+                    int lastIndice = habilidadesHero.lastIndexOf(",");
+                    String habilidadesTexto = habilidadesHero.replace(lastIndice, lastIndice + 2, "").toString();
+                    edtHeroiHabilidades.setText(habilidadesTexto);
+                }
 
+                edtHeroiDano.setFocusable(true);
             }
         });
 
         AlertDialog dialogClasse = builder1.create();
         dialogClasse.show();
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (updateForm) {
-            MenuInflater inflater=getMenuInflater();
-            inflater.inflate(R.menu.menu_remove, menu);
-        }
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_remove:
-                removeHero();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void removeHero() {
@@ -360,65 +370,16 @@ public class CadastroActivity extends AppCompatActivity implements PhotoAsync.Sa
                         }else{
                             Toast.makeText(CadastroActivity.this, "Erro ao deletar heroi!", Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-
                     }
                 });
-
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == REQUEST_CODE_PICK && resultCode == RESULT_OK) {
-            try{
-                Retrofit retrofit = RetrofitInstance.getInstace();
-                PhotosService serviceApi = retrofit.create(PhotosService.class);
-
-                // Get the Image from data
-                Uri selectedImage = data.getData();
-                File file = new File(selectedImage.getPath());
-                RequestBody requestFile =
-                        RequestBody.create(MediaType.parse("multipart/form-data"), file);
-
-                MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
-                Call<ResponseBody> response = serviceApi.uploadFiles(body);
-                response.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()){
-                            Log.wtf(TAG, "dEU BOM");
-                        }else{
-                            Log.wtf(TAG, " ñ dEU BOM");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                });
-
-                photoList.add( selectedImage );
-                adapter.notifyDataSetChanged();
-
-            }catch (Exception e){
-                Toast.makeText(this, "Erro ao recuperar imagens selecionadas\n " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    public void saveHero(List<String> photos) {
-
-        HeroVO hero = new HeroVO();
+    public void saveHero() {
+        HeroDTO hero = new HeroDTO();
         hero.setClassId( classeSelected.getId() );
         hero.setClassName( classeSelected.getName() );
         hero.setName( edtHeroiNome.getText().toString() );
@@ -428,7 +389,14 @@ public class CadastroActivity extends AppCompatActivity implements PhotoAsync.Sa
         hero.setAttackSpeed( Double.parseDouble(edtHeroiVeloAtaque.getText().toString()) );
         hero.setMovimentSpeed( Double.parseDouble(edtHeroiVeloMovimento.getText().toString()) );
 
-        hero.setPhotos( photos );
+        // TODO
+        // Fazer upload das imagens
+        String[] fakeImages = new String[]{"30", "39", "45", "49"};
+        int indiceFakeImages = new Random().nextInt( fakeImages.length );
+        String fakeImage = fakeImages[indiceFakeImages];
+
+        photoSelectedList.add(fakeImage);
+        hero.setPhotos( photoSelectedList );
 
         hero.setSpecialties(specialtySelectedList);
 
@@ -455,5 +423,171 @@ public class CadastroActivity extends AppCompatActivity implements PhotoAsync.Sa
 
             }
         });
+    }
+
+    public void updateHero() {
+        HeroDTO hero = new HeroDTO();
+        hero.setId( heroUpdate.getId() );
+        hero.setClassId( classeSelected.getId() );
+        hero.setClassName( classeSelected.getName() );
+        hero.setName( edtHeroiNome.getText().toString() );
+        hero.setHealthPoints( Double.parseDouble(edtHeroiVida.getText().toString()) );
+        hero.setDefense( Double.parseDouble(edtHeroiDefesa.getText().toString()) );
+        hero.setDamage( Double.parseDouble(edtHeroiDano.getText().toString()) );
+        hero.setAttackSpeed( Double.parseDouble(edtHeroiVeloAtaque.getText().toString()) );
+        hero.setMovimentSpeed( Double.parseDouble(edtHeroiVeloMovimento.getText().toString()) );
+
+        hero.setPhotos( photoSelectedList );
+
+        hero.setSpecialties(specialtySelectedList);
+
+        HeroesService service = retrofit.create(HeroesService.class);
+        Call<Void> apiService = service.updateHero( hero.getId(), hero );
+        apiService.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()){
+
+                    Intent intent = new Intent(CadastroActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                    Toast.makeText(CadastroActivity.this, "Heroi alterado com sucesso!", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Toast.makeText(CadastroActivity.this, "Não foi possivel alterar heroi, tente novamente!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public boolean validateFieldsHero(){
+        StringBuilder dados = new StringBuilder();
+        if(edtHeroiNome.getText().toString().isEmpty()) {
+            dados.append("Nome ,");
+        }else if(edtHeroiClasses.getText().toString().isEmpty()){
+            dados.append("Classe ,");
+        }else if(edtHeroiHabilidades.getText().toString().isEmpty()){
+            dados.append("Habilidades ,");
+        }else if(edtHeroiDano.getText().toString().isEmpty()){
+            dados.append("Dano ,");
+        }else if(edtHeroiDefesa.getText().toString().isEmpty()){
+            dados.append("Defesa ,");
+        }else if(edtHeroiDano.getText().toString().isEmpty()){
+            dados.append("Dano ,");
+        }else if(edtHeroiVida.getText().toString().isEmpty()){
+            dados.append("Vida ,");
+        }else if(edtHeroiVeloMovimento.getText().toString().isEmpty()){
+            dados.append("Velodidade de Movimento ,");
+        }else if(edtHeroiVeloAtaque.getText().toString().isEmpty()) {
+            dados.append("Velodidade de Ataque ,");
+        }
+
+        if(dados.length() > 0) {
+            int lastIndice = dados.lastIndexOf(",");
+            String dadosToast = dados.replace(lastIndice, lastIndice + 2, "").toString();
+            Toast.makeText(this, String.format("É Necessário preencher os campos: %s", dadosToast), Toast.LENGTH_SHORT).show();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (updateForm) {
+            MenuInflater inflater=getMenuInflater();
+            inflater.inflate(R.menu.menu_remove, menu);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_remove:
+                removeHero();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_PICK && resultCode == RESULT_OK) {
+            try{
+                Retrofit retrofit = RetrofitInstance.getInstace();
+                PhotosService serviceApi = retrofit.create(PhotosService.class);
+
+                // Get the Image from data
+                Uri selectedImage = data.getData();
+                File file = new File(selectedImage.getPath());
+                RequestBody requestFile =
+                        RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+                MultipartBody.Part body =
+                        MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+
+                Call<ResponseBody> response = serviceApi.uploadFiles(body);
+                response.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()){
+                            Log.wtf(TAG, "Imagem Salva no Banco de Dados");
+                        }else{
+                            Log.wtf(TAG, "Erro ao cadastrar imagem");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+
+                photoList.add( selectedImage );
+                adapter.notifyDataSetChanged();
+
+            }catch (Exception e){
+                Toast.makeText(this, "Erro ao recuperar imagens selecionadas\n " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Hero hero = (Hero) savedInstanceState.getSerializable("hero");
+
+        carregaDadosHeroi( hero );
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        // Recupera dados do formulario
+
+        Hero hero = new Hero();
+        hero.setClassId( classeSelected.getId() );
+        hero.setClassName( classeSelected.getName() );
+        hero.setName( edtHeroiNome.getText().toString() );
+        hero.setHealthPoints( Double.parseDouble(edtHeroiVida.getText().toString()) );
+        hero.setDefense( Double.parseDouble(edtHeroiDefesa.getText().toString()) );
+        hero.setDamage( Double.parseDouble(edtHeroiDano.getText().toString()) );
+        hero.setAttackSpeed( Double.parseDouble(edtHeroiVeloAtaque.getText().toString()) );
+        hero.setMovimentSpeed( Double.parseDouble(edtHeroiVeloMovimento.getText().toString()) );
+
+        hero.setSpecialties( specialtyList );
+
+        outState.putSerializable("hero", hero);
     }
 }

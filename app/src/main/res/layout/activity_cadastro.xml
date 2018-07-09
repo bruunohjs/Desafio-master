@@ -33,170 +33,258 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout"
+    
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="15dp">
 
-        <android.support.design.widget.TextInputEditText
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome:"
+            android:textSize="14sp"
+            android:paddingLeft="5dp"
+            />
+
+        <EditText
             android:id="@+id/edt_heroi_nome"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:textSize="14sp"
+            android:paddingLeft="5dp"
             android:background="@android:color/white"
-            android:hint="Digite o nome do Heroi"
-            android:textSize="14sp" />
-    </android.support.design.widget.TextInputLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:layout_marginTop="15dp">
-
-        <EditText
-            android:id="@+id/edt_heroi_classes"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="Ex: Mago, Lutador, Cavaleiro"
-            android:enabled="false"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:gravity="center"
-            android:onClick="openDialogClasse"
-            android:text="Adicionar"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:layout_marginTop="15dp"
-        >
-
-        <EditText
-            android:id="@+id/edt_heroi_habilidades"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="Ex: Magia Branca, Invocação"
-            android:enabled="false"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:text="Adicionar"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:clickable="true"
-            android:onClick="openDialogSpecialtie"
             />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Classe"
+            android:textSize="14sp"
+            android:paddingLeft="5dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/white">
+
+            <EditText
+                android:id="@+id/edt_heroi_classes"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Ex: Mago, Lutador, Cavaleiro"
+                android:enabled="false"
+                android:paddingLeft="5dp"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="openDialogClasse"
+                android:text="Adicionar"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Habilidades"
+            android:textSize="14sp"
+            android:paddingLeft="5dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/white"
+            >
+
+            <EditText
+                android:id="@+id/edt_heroi_habilidades"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Ex: Magia Branca, Invocação"
+                android:enabled="false"
+                android:paddingLeft="5dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="Adicionar"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:clickable="true"
+                android:textColor="@color/colorAccent"
+                android:onClick="openDialogSpecialtie"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="Vida"/>
+
+            <EditText
                 android:id="@+id/edt_heroi_vida"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@android:color/white"
-                android:hint="Vida"
                 android:inputType="numberDecimal"
-                android:textSize="14sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                />
 
-        <android.support.design.widget.TextInputLayout
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="Defesa"/>
+
+            <EditText
                 android:id="@+id/edt_heroi_defesa"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@android:color/white"
                 android:inputType="numberDecimal"
-                android:hint="Defesa"
-                android:textSize="14sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                />
 
+        </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="Dano"/>
+
+            <EditText
                 android:id="@+id/edt_heroi_dano"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@android:color/white"
                 android:inputType="numberDecimal"
-                android:hint="Dano"
-                android:textSize="14sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                />
 
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="15dp">
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Velocidade de ataque"
+                android:paddingLeft="5dp"
+                />
+
+            <EditText
                 android:id="@+id/edt_heroi_velo_ataque"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@android:color/white"
-                android:hint="Velocidade de ataque"
                 android:inputType="numberDecimal"
-                android:textSize="14sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                />
 
+        </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Velocidade de movimento"
+                android:paddingLeft="5dp"
+                />
+
+            <EditText
                 android:id="@+id/edt_heroi_velo_movimento"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@android:color/white"
-                android:hint="Velocidade de movimento"
                 android:inputType="numberDecimal"
-                android:textSize="14sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -205,6 +293,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="15dp"
-        android:text="Salvar" />
+        android:text="Salvar"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"/>
 
 </LinearLayout>

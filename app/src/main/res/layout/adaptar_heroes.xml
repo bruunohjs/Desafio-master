@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardElevation="2dp"
-    android:layout_margin="4dp"
+    android:layout_marginBottom="15dp"
     android:background="@android:color/white">
 
     <LinearLayout
@@ -20,7 +20,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher_background" />
+            android:background="@color/cardview_shadow_end_color"
+            />
 
         <TextView
             android:id="@+id/tv_name_id"
@@ -30,7 +31,8 @@
             android:textSize="14sp"
             android:textColor="@color/colorPrimary"
             android:layout_marginTop="4sp"
-            android:text="Avatar" />
+            android:background="@color/cardview_shadow_end_color"
+            />
 
 
         <TextView
@@ -39,7 +41,9 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="11sp"
-            android:text="Mago" />
+            android:layout_marginTop="5dp"
+            android:background="@color/cardview_shadow_end_color"
+            />
 
 
     </LinearLayout>

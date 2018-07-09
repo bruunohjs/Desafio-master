@@ -60,9 +60,9 @@ public class PhotoAsync extends AsyncTask<List<Uri>, String, String> {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()){
-                            Log.wtf(TAG, "dEU BOM");
+                            Log.wtf(TAG, "Imagem Salva no Banco de Dados");
                         }else{
-                            Log.wtf(TAG, " ñ dEU BOM");
+                            Log.wtf(TAG, "Erro ao cadastrar imagem");
                         }
                     }
 
