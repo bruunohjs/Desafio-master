@@ -6,4 +6,17 @@
 
     <string name="action_search">Pesquisar</string>
     <string name="action_remove">Deletar</string>
+    <string name="tv_cad_name">Nome:</string>
+    <string name="tv_cad_classe">Classe</string>
+    <string name="edt_cad_classe">Ex: Mago, Lutador, Cavaleiro</string>
+    <string name="tv_classe_adicionar">Adicionar</string>
+    <string name="tv_cad_habilidades">Habilidades</string>
+    <string name="edt_cad_habilidades">Ex: Magia Branca, Invocação</string>
+    <string name="tv_habilidades_adicionar">Adicionar</string>
+    <string name="tv_cad_vida">Vida</string>
+    <string name="tv_cad_defesa">Defesa</string>
+    <string name="tv_cad_dano">Dano</string>
+    <string name="tv_cad_velo_ataque">Velocidade de ataque</string>
+    <string name="tv_cad_velo_movimento">Velocidade de movimento</string>
+    <string name="btn_cad_salvar">Salvar</string>
 </resources>

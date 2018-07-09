@@ -46,19 +46,19 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class CadastroActivity extends AppCompatActivity{
-    private EditText edtHeroiNome,
-            edtHeroiClasses,
-            edtHeroiHabilidades,
-            edtHeroiVida,
-            edtHeroiDefesa,
-            edtHeroiDano,
-            edtHeroiVeloAtaque,
-            edtHeroiVeloMovimento;
+    private EditText edtHeroNome,
+            edtHeroClasses,
+            edtHeroHabilidades,
+            edtHeroVida,
+            edtHeroDefesa,
+            edtHeroDano,
+            edtHeroVeloAtaque,
+            edtHeroVeloMovimento;
 
     private Button btnSalvarHeroi;
     private Button btnAddAvatar;
 
-    private RecyclerView rvHeroiAvatares;
+    private RecyclerView rvHeroAvatares;
     private LinearLayoutManager mLayoutManager;
     private PhotosAdapter adapter;
 
@@ -104,13 +104,13 @@ public class CadastroActivity extends AppCompatActivity{
     }
 
     private void carregaDadosHeroi(Hero heroUpdate) {
-        edtHeroiNome.setText( heroUpdate.getName() );
-        edtHeroiClasses.setText( heroUpdate.getClassName() );
-        edtHeroiVida.setText( String.valueOf(heroUpdate.getHealthPoints()) );
-        edtHeroiDano.setText( String.valueOf(heroUpdate.getDamage()) );
-        edtHeroiDefesa.setText( String.valueOf(heroUpdate.getDefense()) );
-        edtHeroiVeloAtaque.setText( String.valueOf(heroUpdate.getAttackSpeed()) );
-        edtHeroiVeloMovimento.setText( String.valueOf(heroUpdate.getMovimentSpeed()) );
+        edtHeroNome.setText( heroUpdate.getName() );
+        edtHeroClasses.setText( heroUpdate.getClassName() );
+        edtHeroVida.setText( String.valueOf(heroUpdate.getHealthPoints()) );
+        edtHeroDano.setText( String.valueOf(heroUpdate.getDamage()) );
+        edtHeroDefesa.setText( String.valueOf(heroUpdate.getDefense()) );
+        edtHeroVeloAtaque.setText( String.valueOf(heroUpdate.getAttackSpeed()) );
+        edtHeroVeloMovimento.setText( String.valueOf(heroUpdate.getMovimentSpeed()) );
 
         // Carrega Classe
         classeSelected = new Classe( heroUpdate.getClassId(), heroUpdate.getClassName());
@@ -123,7 +123,7 @@ public class CadastroActivity extends AppCompatActivity{
         }
         int lastIndice = habilidadesName.lastIndexOf(",");
         String habilidadesTexto = habilidadesName.replace(lastIndice, lastIndice+2, "").toString();
-        edtHeroiHabilidades.setText( habilidadesTexto );
+        edtHeroHabilidades.setText( habilidadesTexto );
 
         // Carrega fotos
         Uri uri = Uri.parse(
@@ -136,28 +136,28 @@ public class CadastroActivity extends AppCompatActivity{
     private void initViews() {
 
         /*Configura o recyclerview*/
-        rvHeroiAvatares = findViewById(R.id.rv_heroi_avatar);
+        rvHeroAvatares = findViewById(R.id.rv_heroi_avatar);
 
         adapter = new PhotosAdapter( photoList );
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        rvHeroiAvatares = findViewById(R.id.rv_heroi_avatar);
-        rvHeroiAvatares.setAdapter(adapter);
-        rvHeroiAvatares.setLayoutManager(mLayoutManager);
-        rvHeroiAvatares.setHasFixedSize(false);
+        rvHeroAvatares = findViewById(R.id.rv_heroi_avatar);
+        rvHeroAvatares.setAdapter(adapter);
+        rvHeroAvatares.setLayoutManager(mLayoutManager);
+        rvHeroAvatares.setHasFixedSize(false);
         /*Configura o recyclerview*/
 
         /*Inicia as views*/
-        edtHeroiNome = findViewById(R.id.edt_heroi_nome);
-        edtHeroiClasses = findViewById(R.id.edt_heroi_classes);
-        edtHeroiHabilidades = findViewById(R.id.edt_heroi_habilidades);
+        edtHeroNome = findViewById(R.id.edt_heroi_nome);
+        edtHeroClasses = findViewById(R.id.edt_heroi_classes);
+        edtHeroHabilidades = findViewById(R.id.edt_heroi_habilidades);
 
-        edtHeroiVida = findViewById(R.id.edt_heroi_vida);
-        edtHeroiDefesa = findViewById(R.id.edt_heroi_defesa);
-        edtHeroiDano = findViewById(R.id.edt_heroi_dano);
-        edtHeroiVeloAtaque = findViewById(R.id.edt_heroi_velo_ataque);
-        edtHeroiVeloMovimento = findViewById(R.id.edt_heroi_velo_movimento);
+        edtHeroVida = findViewById(R.id.edt_heroi_vida);
+        edtHeroDefesa = findViewById(R.id.edt_heroi_defesa);
+        edtHeroDano = findViewById(R.id.edt_heroi_dano);
+        edtHeroVeloAtaque = findViewById(R.id.edt_heroi_velo_ataque);
+        edtHeroVeloMovimento = findViewById(R.id.edt_heroi_velo_movimento);
         /*Inicia as views*/
 
         btnAddAvatar = findViewById(R.id.btn_addavatar_id);
@@ -299,7 +299,7 @@ public class CadastroActivity extends AppCompatActivity{
         builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                edtHeroiClasses.setText( classeSelected.getName() );
+                edtHeroClasses.setText( classeSelected.getName() );
             }
         });
 
@@ -345,10 +345,10 @@ public class CadastroActivity extends AppCompatActivity{
                 if(habilidadesHero.length() > 0){
                     int lastIndice = habilidadesHero.lastIndexOf(",");
                     String habilidadesTexto = habilidadesHero.replace(lastIndice, lastIndice + 2, "").toString();
-                    edtHeroiHabilidades.setText(habilidadesTexto);
+                    edtHeroHabilidades.setText(habilidadesTexto);
                 }
 
-                edtHeroiDano.setFocusable(true);
+                edtHeroDano.setFocusable(true);
             }
         });
 
@@ -382,12 +382,12 @@ public class CadastroActivity extends AppCompatActivity{
         HeroDTO hero = new HeroDTO();
         hero.setClassId( classeSelected.getId() );
         hero.setClassName( classeSelected.getName() );
-        hero.setName( edtHeroiNome.getText().toString() );
-        hero.setHealthPoints( Double.parseDouble(edtHeroiVida.getText().toString()) );
-        hero.setDefense( Double.parseDouble(edtHeroiDefesa.getText().toString()) );
-        hero.setDamage( Double.parseDouble(edtHeroiDano.getText().toString()) );
-        hero.setAttackSpeed( Double.parseDouble(edtHeroiVeloAtaque.getText().toString()) );
-        hero.setMovimentSpeed( Double.parseDouble(edtHeroiVeloMovimento.getText().toString()) );
+        hero.setName( edtHeroNome.getText().toString() );
+        hero.setHealthPoints( Double.parseDouble(edtHeroVida.getText().toString()) );
+        hero.setDefense( Double.parseDouble(edtHeroDefesa.getText().toString()) );
+        hero.setDamage( Double.parseDouble(edtHeroDano.getText().toString()) );
+        hero.setAttackSpeed( Double.parseDouble(edtHeroVeloAtaque.getText().toString()) );
+        hero.setMovimentSpeed( Double.parseDouble(edtHeroVeloMovimento.getText().toString()) );
 
         // TODO
         // Fazer upload das imagens
@@ -430,12 +430,12 @@ public class CadastroActivity extends AppCompatActivity{
         hero.setId( heroUpdate.getId() );
         hero.setClassId( classeSelected.getId() );
         hero.setClassName( classeSelected.getName() );
-        hero.setName( edtHeroiNome.getText().toString() );
-        hero.setHealthPoints( Double.parseDouble(edtHeroiVida.getText().toString()) );
-        hero.setDefense( Double.parseDouble(edtHeroiDefesa.getText().toString()) );
-        hero.setDamage( Double.parseDouble(edtHeroiDano.getText().toString()) );
-        hero.setAttackSpeed( Double.parseDouble(edtHeroiVeloAtaque.getText().toString()) );
-        hero.setMovimentSpeed( Double.parseDouble(edtHeroiVeloMovimento.getText().toString()) );
+        hero.setName( edtHeroNome.getText().toString() );
+        hero.setHealthPoints( Double.parseDouble(edtHeroVida.getText().toString()) );
+        hero.setDefense( Double.parseDouble(edtHeroDefesa.getText().toString()) );
+        hero.setDamage( Double.parseDouble(edtHeroDano.getText().toString()) );
+        hero.setAttackSpeed( Double.parseDouble(edtHeroVeloAtaque.getText().toString()) );
+        hero.setMovimentSpeed( Double.parseDouble(edtHeroVeloMovimento.getText().toString()) );
 
         hero.setPhotos( photoSelectedList );
 
@@ -468,23 +468,23 @@ public class CadastroActivity extends AppCompatActivity{
 
     public boolean validateFieldsHero(){
         StringBuilder dados = new StringBuilder();
-        if(edtHeroiNome.getText().toString().isEmpty()) {
+        if(edtHeroNome.getText().toString().isEmpty()) {
             dados.append("Nome ,");
-        }else if(edtHeroiClasses.getText().toString().isEmpty()){
+        }else if(edtHeroClasses.getText().toString().isEmpty()){
             dados.append("Classe ,");
-        }else if(edtHeroiHabilidades.getText().toString().isEmpty()){
+        }else if(edtHeroHabilidades.getText().toString().isEmpty()){
             dados.append("Habilidades ,");
-        }else if(edtHeroiDano.getText().toString().isEmpty()){
+        }else if(edtHeroDano.getText().toString().isEmpty()){
             dados.append("Dano ,");
-        }else if(edtHeroiDefesa.getText().toString().isEmpty()){
+        }else if(edtHeroDefesa.getText().toString().isEmpty()){
             dados.append("Defesa ,");
-        }else if(edtHeroiDano.getText().toString().isEmpty()){
+        }else if(edtHeroDano.getText().toString().isEmpty()){
             dados.append("Dano ,");
-        }else if(edtHeroiVida.getText().toString().isEmpty()){
+        }else if(edtHeroVida.getText().toString().isEmpty()){
             dados.append("Vida ,");
-        }else if(edtHeroiVeloMovimento.getText().toString().isEmpty()){
+        }else if(edtHeroVeloMovimento.getText().toString().isEmpty()){
             dados.append("Velodidade de Movimento ,");
-        }else if(edtHeroiVeloAtaque.getText().toString().isEmpty()) {
+        }else if(edtHeroVeloAtaque.getText().toString().isEmpty()) {
             dados.append("Velodidade de Ataque ,");
         }
 
@@ -579,12 +579,12 @@ public class CadastroActivity extends AppCompatActivity{
         Hero hero = new Hero();
         hero.setClassId( classeSelected.getId() );
         hero.setClassName( classeSelected.getName() );
-        hero.setName( edtHeroiNome.getText().toString() );
-        hero.setHealthPoints( Double.parseDouble(edtHeroiVida.getText().toString()) );
-        hero.setDefense( Double.parseDouble(edtHeroiDefesa.getText().toString()) );
-        hero.setDamage( Double.parseDouble(edtHeroiDano.getText().toString()) );
-        hero.setAttackSpeed( Double.parseDouble(edtHeroiVeloAtaque.getText().toString()) );
-        hero.setMovimentSpeed( Double.parseDouble(edtHeroiVeloMovimento.getText().toString()) );
+        hero.setName( edtHeroNome.getText().toString() );
+        hero.setHealthPoints( Double.parseDouble(edtHeroVida.getText().toString()) );
+        hero.setDefense( Double.parseDouble(edtHeroDefesa.getText().toString()) );
+        hero.setDamage( Double.parseDouble(edtHeroDano.getText().toString()) );
+        hero.setAttackSpeed( Double.parseDouble(edtHeroVeloAtaque.getText().toString()) );
+        hero.setMovimentSpeed( Double.parseDouble(edtHeroVeloMovimento.getText().toString()) );
 
         hero.setSpecialties( specialtyList );
 

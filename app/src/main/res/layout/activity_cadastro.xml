@@ -21,6 +21,7 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_add_24dp"
+            android:drawableStart="@drawable/ic_add_24dp"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -43,9 +44,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome:"
+            android:text="@string/tv_cad_name"
             android:textSize="14sp"
             android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             />
 
         <EditText
@@ -54,6 +57,8 @@
             android:layout_height="40dp"
             android:textSize="14sp"
             android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:background="@android:color/white"
             />
     </LinearLayout>
@@ -67,9 +72,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Classe"
+            android:text="@string/tv_cad_classe"
             android:textSize="14sp"
             android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             />
 
         <LinearLayout
@@ -83,9 +90,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Ex: Mago, Lutador, Cavaleiro"
+                android:hint="@string/edt_cad_classe"
                 android:enabled="false"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:textSize="13sp" />
 
             <TextView
@@ -95,7 +104,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="openDialogClasse"
-                android:text="Adicionar"
+                android:text="@string/tv_classe_adicionar"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -111,9 +120,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Habilidades"
+            android:text="@string/tv_cad_habilidades"
             android:textSize="14sp"
             android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             />
 
         <LinearLayout
@@ -128,16 +139,18 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Ex: Magia Branca, Invocação"
+                android:hint="@string/edt_cad_habilidades"
                 android:enabled="false"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:textSize="14sp" />
 
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:text="Adicionar"
+                android:text="@string/tv_habilidades_adicionar"
                 android:gravity="center"
                 android:textSize="12sp"
                 android:clickable="true"
@@ -163,7 +176,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
-                android:text="Vida"/>
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/tv_cad_vida"/>
 
             <EditText
                 android:id="@+id/edt_heroi_vida"
@@ -173,6 +188,8 @@
                 android:inputType="numberDecimal"
                 android:textSize="14sp"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 />
 
         </LinearLayout>
@@ -189,7 +206,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
-                android:text="Defesa"/>
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/tv_cad_defesa"/>
 
             <EditText
                 android:id="@+id/edt_heroi_defesa"
@@ -199,6 +218,8 @@
                 android:inputType="numberDecimal"
                 android:textSize="14sp"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 />
 
         </LinearLayout>
@@ -213,7 +234,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
-                android:text="Dano"/>
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/tv_cad_dano"/>
 
             <EditText
                 android:id="@+id/edt_heroi_dano"
@@ -223,6 +246,8 @@
                 android:inputType="numberDecimal"
                 android:textSize="14sp"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 />
 
         </LinearLayout>
@@ -244,8 +269,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Velocidade de ataque"
+                android:text="@string/tv_cad_velo_ataque"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 />
 
             <EditText
@@ -256,6 +283,8 @@
                 android:inputType="numberDecimal"
                 android:textSize="14sp"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 />
 
         </LinearLayout>
@@ -265,13 +294,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="15dp"
+            android:layout_marginStart="5dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Velocidade de movimento"
+                android:text="@string/tv_cad_velo_movimento"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 />
 
             <EditText
@@ -282,6 +314,8 @@
                 android:inputType="numberDecimal"
                 android:textSize="14sp"
                 android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 />
 
         </LinearLayout>
@@ -293,7 +327,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="15dp"
-        android:text="Salvar"
+        android:text="@string/btn_cad_salvar"
         android:textColor="@android:color/white"
         android:background="@color/colorPrimary"/>
 
